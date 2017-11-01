@@ -1,0 +1,57 @@
+% !TeX program = xelatex
+% !TeX spellcheck = ru_RU
+\documentclass[DIV=11,12pt,a4paper]{scrartcl}
+\usepackage[colorlinks,linkcolor=black,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage[russian]{babel}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{physics}
+\usepackage{microtype}
+
+\usepackage{unicode-math}
+\setmainfont{STIX Two Text}
+\setmathfont{STIX Two Math}
+\setsansfont[Scale=0.99]{PT Sans}
+\linespread{1.1}
+\KOMAoptions{DIV=last}
+
+%\frenchspacing
+\begin{document}
+\tableofcontents
+
+\section{Базовые уравнения}
+
+Рассматривается задача о движении и излучении ленточного пучка электронов в планарном гофрированном волноводе.
+Предполагается, что излучение сконцентрировано в TEM-моде волновода.
+Уравнение возбуждения такой моды записывается как
+\begin{equation}
+    \frac{1}{c^2}\pdv[2]{A}{t} - \pdv[2]{A}{z} = \frac{4\pi}{c} \bar{h} l_0 \cos(\bar{h} z) J(t,z),
+    \label{eq:Adimension}
+\end{equation}
+где $A=A_x$~--- поперечный вектор-потенциал в TEM-моде, $\bar{h} = 2\pi/d$, $d$~--- период гофрировки волновода, $l_0(z)$~--- глубина гофрировки волновода, $b$ --- расстояние между пластинами волновода, $J = b^{-1}\int_{-b/2}^{b/2} j_z(t,x,z) \dd{x}$.
+
+В предположении, что электроны движутся только по продольной координате, на них действует продольная сила
+\begin{equation}
+    F_z = -e E \cos(\bar{h}z) \bar{h} l_0,
+\end{equation}
+где 
+\begin{equation}
+    E = E_x = -\frac{1}{c}\pdv{A}{t}.
+\end{equation}
+
+Перейдем к безразмерным переменным.
+Наличие периода гофрировки $d$ задает естественный пространственный размер, поэтому введем $\vb{r}' = \bar{h} \vb{r}$, $t' = c\bar{h} t$, $A' = eA/mc^2$, $E' = eE/mc^2\bar{h}$, $j_z' = j_z / c \bar{n}$, где $\bar{n}$ --- критическая концентрация для частоты $c\bar{h}$.
+В таком случае $J' = J/c \bar{n}$.
+Тогда уравнение \eqref{eq:Adimension} запишется в виде
+\begin{equation}
+    \pdv[2]{A}{t} - \pdv[2]{A}{z} = J(t, z) l_0(z) \cos z.
+\end{equation}
+Штрихи в этом уравнении опущены.
+Вводя безразмерный импульс $p' = p/mc$, получим для движения электрона уравнение
+\begin{equation}
+    \dv{p}{t} = - E l_0 \cos z, \quad \dv{z}{t} = \frac{p}{\gamma}.
+\end{equation}
+Здесь штрихи также опущены.
+
+\end{document}
