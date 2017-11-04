@@ -26,14 +26,14 @@
 Предполагается, что излучение сконцентрировано в TEM-моде волновода.
 Уравнение возбуждения такой моды записывается как
 \begin{equation}
-    \frac{1}{c^2}\pdv[2]{A}{t} - \pdv[2]{A}{z} = \frac{4\pi}{c} \bar{h} l_0 \cos(\bar{h} z) J(t,z),
+    \frac{1}{c^2}\pdv[2]{A}{t} - \pdv[2]{A}{z} = \frac{4\pi}{c} \bar{h} l_0 \cos(\bar{h} z - \bar{h} z_0) J(t,z),
     \label{eq:Adimension}
 \end{equation}
 где $A=A_x$~--- поперечный вектор-потенциал в TEM-моде, $\bar{h} = 2\pi/d$, $d$~--- период гофрировки волновода, $l_0(z)$~--- глубина гофрировки волновода, $b$ --- расстояние между пластинами волновода, $J = b^{-1}\int_{-b/2}^{b/2} j_z(t,x,z) \dd{x}$.
 
 В предположении, что электроны движутся только по продольной координате, на них действует продольная сила
 \begin{equation}
-    F_z = -e E \cos(\bar{h}z) \bar{h} l_0,
+    F_z = -e E \cos(\bar{h}z - \bar{h}z_0) \bar{h} l_0,
 \end{equation}
 где 
 \begin{equation}
@@ -45,12 +45,12 @@
 В таком случае $J' = J/c \bar{n}$.
 Тогда уравнение \eqref{eq:Adimension} запишется в виде
 \begin{equation}
-    \pdv[2]{A}{t} - \pdv[2]{A}{z} = J(t, z) l_0(z) \cos z.
+    \pdv[2]{A}{t} - \pdv[2]{A}{z} = J(t, z) l_0(z) \cos (z-z_0).
 \end{equation}
 Штрихи в этом уравнении опущены.
 Вводя безразмерный импульс $p' = p/mc$, получим для движения электрона уравнение
 \begin{equation}
-    \dv{p}{t} = - E l_0 \cos z, \quad \dv{z}{t} = \frac{p}{\gamma}.
+    \dv{p}{t} = - E l_0 \cos (z-z_0), \quad \dv{z}{t} = \frac{p}{\gamma}.
 \end{equation}
 Здесь штрихи также опущены.
 
@@ -64,10 +64,44 @@
 Тогда система уравнений, которую нам требуется решать, запишется как
 \begin{align}
     &\pdv{A}{t} = - E,\\
-    &\pdv{E}{t} = -\pdv[2]{A}{z} + \sum_i Q_i v_i S(z - z_i) l_0(z) \cos z,\\
-    &\dv{p_i}{t} = -\int_{-\infty}^{\infty} S(z-z_i(t)) E(z,t) l_0(z)  \cos z \dd{z},\\
+    &\pdv{E}{t} = -\pdv[2]{A}{z} + \sum_i Q_i v_i S(z - z_i) l_0(z) \cos (z-z_0),\\
+    &\dv{p_i}{t} = -\int_{-\infty}^{\infty} S(z-z_i(t)) E(z,t) l_0(z)  \cos (z-z_0) \dd{z},\\
     &\dv{z_i}{t} = v_i.
 \end{align}
 Здесь полагается, что $\int_{-\infty}^\infty S(z) \dd{z} = 1$, а $p_i$ является импульсом каждого электрона в макрочастице.
+
+\section{Схема решения уравнений для поля}
+
+Рассмотрим систему уравнений 
+\begin{align}
+    &\pdv{A}{t} = -E,\\
+    &\pdv{E}{t} = -\pdv[2]{A}{z} + S.
+\end{align}
+Введем пространственную сетку с шагом $\Delta x$ и преобразуем уравнения к конечным разностям:
+\begin{align}
+    &\pdv{A_i}{t} = -E_i,\\
+    &\pdv{E_i}{t} = - \frac{A_{i+1} - 2 A_i + A_{i-1}}{\Delta z^2} + S_i.
+\end{align}
+Для интегрирования по времени используем leapfrog-схему, в которой $E_i$ и $A_i$ берутся в разные моменты времени
+\begin{align}
+    &\frac{A_i^{n+1/2} - A_i^{n-1/2}}{\Delta t} = - E_i^n,\\
+    &\frac{E_i^{n+1} - E_i^{n}}{\Delta t} = - \frac{A_{i+1}^{n+1/2} - 2 A_i^{n+1/2} + A_{i-1}^{n+1/2}}{\Delta z^2} + S_i^n.
+\end{align}
+
+\subsection{Граничные условия}
+На границах области ставится граничное условие излучения.
+На левой и правой границе, соответственно,
+\begin{equation}
+    \pdv{A}{t} - \pdv{A}{z} = 0, \quad \pdv{A}{t} + \pdv{A}{z} = 0.
+\end{equation}
+Рассмотрим левую границу и используем на ней разностную схему первого порядка
+\begin{equation}
+    \frac{A_0^{n+3/2} - A_0^{n+1/2}}{\Delta t} - \frac{A_1^{n+1/2} - A_0^{n+1/2}}{\Delta z} = 0.
+\end{equation}
+Разность в числителе первой дроби в точности равна $- E_0^{n+1} \Delta t$ в нашей численной схеме.
+Таким образом, граничные условия:
+\begin{equation}
+    E_0^{n+1} = \frac{A_0^{n+1/2} - A_1^{n+1}}{\Delta z}, \quad E_{N-1}^{n+1} = \frac{A_{N-1}^{n+1/2} - A_{N-2}^{n+1}}{\Delta z}.
+\end{equation}
 
 \end{document}
